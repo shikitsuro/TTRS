@@ -50,10 +50,22 @@
 /////////////////////////////////////////////////////////////////
 // グローバル変数                                              //
 /////////////////////////////////////////////////////////////////
-
+//フィールド座標について
+// 4
+// 3
+// 2
+// 1234
+//
+//ミノ座標について
+// 1234
+// 2
+// 3
+// 4
+//
+/////////////////////////////////////////////////////////////////
 //フラグ管理
-//0 :左右移動の待機時間1P
-//1 :ハードドロップ暴発回避
+//0 :左右移動の待機時間1P(int)
+//1 :ハードドロップ暴発回避(bool)
 //2
 //~:未実装
 int flag[100] = { 0 };
@@ -62,14 +74,14 @@ int flag[100] = { 0 };
 struct Player{
 	int x;
 	int y;
-	int rota;//向き//B->+ A->-
+	int rota;//向き//B→+ A→-
 	int now;//現在のミノ//XSZLJIOT//nowが8のとき進める
 	int hold;
 	int next[5];
 	int nexttable[7];//7回で更新
 	int tablepoint;
 	int prehold;//use hold yet?
-	int prerota; //use rotation yet?
+	int prerota; //use rotation yet?//初期状態は0
 	int premove;//use move yet?
 }typedef Player;
 struct Field {
@@ -500,6 +512,9 @@ void SRS(Player *p0, Field *f0){
 		}
 	}*/
 	//SRS処理//
+	//base 直前角度
+	//rote 現在角度
+	//prerote 直前回転方向 //zが1 xが2
 	a = able(p0, f0);
 	if (a == 1) {
 		if (p0->prerota == 1)base = (p0->rota+3)%4;
@@ -510,7 +525,176 @@ void SRS(Player *p0, Field *f0){
 			//回転なし
 		}
 		else if(p0->now == 5){//I
-			p0->rota = base;
+			for (int S = 1;S < 6; S++) {
+				if      (S == 1) {////////////////////
+					if(base==0){
+						if (p0->prerota == 1) {
+							p0->x--;
+						}
+						else if (p0->prerota == 2) {
+							p0->x-=2;
+						}
+					}
+					else if(base==1){
+						if (p0->prerota == 1) {
+							p0->x++;
+						}
+						else if (p0->prerota == 2) {
+							p0->x-=2;
+						}
+					}
+					else if(base==2){
+						if (p0->prerota == 1) {
+							p0->x++;
+						}
+						else if (p0->prerota == 2) {
+							p0->x+=2;
+						}
+					}
+					else if(base==3){
+						if (p0->prerota == 1) {
+							p0->x+=2;
+						}
+						else if (p0->prerota == 2) {
+							p0->x--;
+						}
+					}
+					if (able(p0, f0) == 0)break;
+				}
+				else if (S == 2) {	
+					p0->x=bX;p0->y=bY;/////////////////
+					if(base==0){
+						if (p0->prerota == 1) {
+							p0->x+=2;
+						}
+						else if (p0->prerota == 2) {
+							p0->x++;
+						}
+					}
+					else if(base==1){
+						if (p0->prerota == 1) {
+							p0->x-=2;
+						}
+						else if (p0->prerota == 2) {
+							p0->x++;
+						}
+					}
+					else if(base==2){
+						if (p0->prerota == 1) {
+							p0->x-=2;
+						}
+						else if (p0->prerota == 2) {
+							p0->x--;
+						}
+					}
+					else if(base==3){
+						if (p0->prerota == 1) {
+							p0->x--;
+						}
+						else if (p0->prerota == 2) {
+							p0->x+=2;
+						}
+					}
+					if (able(p0, f0) == 0)break;
+				}
+				else if (S == 3) {
+					p0->x=bX;p0->y=bY;/////////////////
+					if(base==0){
+						if (p0->prerota == 1) {
+							p0->x--;
+							p0->y+=2;
+						}
+						else if (p0->prerota == 2) {
+							p0->x-=2;
+							p0->y--;
+						}
+					}
+					else if(base==1){
+						if (p0->prerota == 1) {
+							p0->x--;
+							p0->y--;///
+						}
+						else if (p0->prerota == 2) {
+							p0->x++;
+							p0->y-=2;
+						}
+					}
+					else if(base==2){
+						if (p0->prerota == 1) {
+							p0->x++;
+							p0->y-=2;
+						}
+						else if (p0->prerota == 2) {
+							p0->x+=2;
+							p0->y++;
+						}
+					}
+					else if(base==3){
+						if (p0->prerota == 1) {
+							p0->x+=2;
+							p0->y++;
+						}
+						else if (p0->prerota == 2) {
+							p0->x--;
+							p0->y+=2;
+						}
+					}
+					if (able(p0, f0) == 0)break;
+				}
+				else if (S == 4) {
+					p0->x=bX;p0->y=bY;/////////////////
+					if(base==0){
+						if (p0->prerota == 1) {
+							p0->x+=2;
+							p0->y--;
+						}
+						else if (p0->prerota == 2) {
+							p0->x++;
+							p0->y+=2;
+						}
+					}
+					else if(base==1){
+						if (p0->prerota == 1) {
+							p0->x++;
+							p0->y+=2;
+						}
+						else if (p0->prerota == 2) {
+							p0->x-=2;
+							p0->y++;
+						}
+					}
+					else if(base==2){
+						if (p0->prerota == 1) {
+							p0->x-=2;
+							p0->y++;
+						}
+						else if (p0->prerota == 2) {
+							p0->x--;
+							p0->y-=2;
+						}
+					}
+					else if(base==3){
+						if (p0->prerota == 1) {
+							p0->x--;
+							p0->y-=2;
+						}
+						else if (p0->prerota == 2) {
+							p0->x+=2;
+							p0->y--;
+						}
+					}
+					if (able(p0, f0) == 0)break;
+				}
+				else if (S == 5){
+					p0->x = bX;
+					p0->y = bY;
+					p0->rota = base;
+					break;
+				}
+			}
+			//else{
+			//p0->rota = base;
+			//}
 		}
 		else{//SZLJT
 			for (int S = 1;S < 6; S++) {
