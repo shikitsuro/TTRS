@@ -611,7 +611,7 @@ void SRS(Player *p0, Field *f0){
 					}
 					else if(base==1){
 						if (p0->prerota == 1) {
-							p0->x--;
+							p0->x-=2;
 							p0->y--;///
 						}
 						else if (p0->prerota == 2) {
