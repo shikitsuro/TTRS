@@ -4,7 +4,10 @@
 //
 ////memo
 //–¢À‘•
-//ghost SRS
+//Imino repair
+//reset//‰‹}ˆ’u
+//ghost
+//question_make
 //gravity
 //gameover
 ////
@@ -74,7 +77,7 @@ int flag[100] = { 0 };
 struct Player{
 	int x;
 	int y;
-	int rota;//Œü‚«//B¨+ A¨-
+	int rota;//Œü‚«//ãŒü‚«‚ª0//B¨+ A¨-
 	int now;//Œ»İ‚Ìƒ~ƒm//XSZLJIOT//now‚ª8‚Ì‚Æ‚«i‚ß‚é
 	int hold;
 	int next[5];
@@ -401,6 +404,10 @@ void nextcontact(Player *p0, Field *f0) {
 	}
 }
 void operate(Player *p0, Field *f0){
+	if (CheckHitKey(KEY_INPUT_R)){
+		Init(p0,f0);
+		return;
+	}
 	if (flag[0] <= 1) {
 		if (CheckHitKey(KEY_INPUT_UP)) {
 			if (flag[1] == 0) {
